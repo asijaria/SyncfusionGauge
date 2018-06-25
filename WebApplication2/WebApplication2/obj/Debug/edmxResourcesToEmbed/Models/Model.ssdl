@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LearningModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="EmployeeAddressDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="House_Number" Type="varchar" MaxLength="50" />
+    <Property Name="Street" Type="varchar" MaxLength="200" />
+    <Property Name="City" Type="varchar" MaxLength="200" />
+    <Property Name="State" Type="varchar" MaxLength="200" />
+    <Property Name="Pin" Type="int" />
+    <Property Name="EmployeeId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DateOfJoining" Type="datetime" />
+    <Property Name="EmployeeNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Invoice">
+    <Key>
+      <PropertyRef Name="Customer_ID" />
+    </Key>
+    <Property Name="Customer_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fill_Amount" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentDetail">
+    <Key>
+      <PropertyRef Name="PaymentId" />
+    </Key>
+    <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_ID" Type="int" Nullable="false" />
+    <Property Name="Payment" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="EmailId" Type="varchar" MaxLength="250" Nullable="false" />
+    <Property Name="DateOfBrith" Type="datetime" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
+    <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="IsSupervisor" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_EmployeeAddressDetails_Employees">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+    <End Role="EmployeeAddressDetails" Type="Self.EmployeeAddressDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeAddressDetails">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LearningModelStoreContainer">
+    <EntitySet Name="EmployeeAddressDetails" EntityType="Self.EmployeeAddressDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PaymentDetail" EntityType="Self.PaymentDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_EmployeeAddressDetails_Employees" Association="Self.FK_EmployeeAddressDetails_Employees">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="EmployeeAddressDetails" EntitySet="EmployeeAddressDetails" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

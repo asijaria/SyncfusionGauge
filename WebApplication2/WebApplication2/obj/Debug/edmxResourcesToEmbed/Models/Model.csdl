@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LearningModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="EmployeeAddressDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="House_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Street" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Pin" Type="Int32" />
+    <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_EmployeeAddressDetails_Employees" FromRole="EmployeeAddressDetails" ToRole="Employees" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateOfJoining" Type="DateTime" Precision="3" />
+    <Property Name="EmployeeNumber" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="EmployeeAddressDetails" Relationship="Self.FK_EmployeeAddressDetails_Employees" FromRole="Employees" ToRole="EmployeeAddressDetails" />
+  </EntityType>
+  <EntityType Name="Invoice">
+    <Key>
+      <PropertyRef Name="Customer_ID" />
+    </Key>
+    <Property Name="Customer_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Fill_Amount" Type="Double" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentDetail">
+    <Key>
+      <PropertyRef Name="PaymentId" />
+    </Key>
+    <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_ID" Type="Int32" Nullable="false" />
+    <Property Name="Payment" Type="Double" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmailId" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateOfBrith" Type="DateTime" Precision="3" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
+    <Property Name="ActivationCode" Type="Guid" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="IsSupervisor" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_EmployeeAddressDetails_Employees">
+    <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+    <End Role="EmployeeAddressDetails" Type="Self.EmployeeAddressDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeAddressDetails">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="EmployeeAddressDetails" EntityType="Self.EmployeeAddressDetail" />
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <EntitySet Name="Invoices" EntityType="Self.Invoice" />
+    <EntitySet Name="PaymentDetails" EntityType="Self.PaymentDetail" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_EmployeeAddressDetails_Employees" Association="Self.FK_EmployeeAddressDetails_Employees">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="EmployeeAddressDetails" EntitySet="EmployeeAddressDetails" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

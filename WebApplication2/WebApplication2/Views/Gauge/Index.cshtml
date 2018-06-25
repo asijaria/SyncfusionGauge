@@ -1,0 +1,68 @@
+﻿@using Syncfusion.JavaScript.DataVisualization
+@using Syncfusion.JavaScript.Models
+@using WebApplication2.Controllers
+@using Syncfusion.JavaScript
+@using Syncfusion.MVC.EJ
+@model WebApplication2.Models.Invoice
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<div style="float:left;width:600px;height:250px;">
+    @(Html.EJ().Grid<WebApplication2.Models.Invoice>("Invoice")
+                    .Datasource(datasource => datasource.URL(@Url.Action("DataSource"))
+                    .Adaptor(AdaptorType.UrlAdaptor))
+                    .AllowPaging()
+                    .Columns(col =>
+                    {
+                        col.Field(p => p.Customer_ID).HeaderText("Customer ID").TextAlign(TextAlign.Left).Add();
+                        col.Field(p => p.Fill_Amount).HeaderText("Fill Amount").Add();
+                    })
+                    .ClientSideEvents(c => c.RowSelected("rowSelect"))
+    )
+</div>
+
+<div style="width:300px;height:400px;float:right;">
+    @(Html.EJ().CircularGauge("circulargauge1")
+      .IsResponsive(true)
+                .BackgroundColor("transparent")
+                    .ClientSideEvents(cli => cli.Load("loadGaugeTheme"))
+                .Scales(sc =>
+                {
+                    sc.Radius(130)
+                    .PointerCap(cap => cap.Radius(10))
+                    .Minimum(0)
+                    .MajorIntervalValue(1000)
+                    .MinorIntervalValue(500)
+                    .Maximum(20000)
+                    .ShowScaleBar(true)
+                    .Size(1)
+                    .ShowRanges(true)
+                    .Ranges(ran =>
+                    {
+                        ran.Size(5).DistanceFromScale(-30).StartValue(0).EndValue(7000).Add();
+                        ran.Size(5).DistanceFromScale(-30).StartValue(7000).EndValue(14000).BackgroundColor(ConsoleColor.Red.ToString()).Border(bor => bor.Color(ConsoleColor.Red.ToString())).Add();
+                        ran.Size(5).DistanceFromScale(-30).StartValue(14000).EndValue(20000).BackgroundColor(ConsoleColor.Yellow.ToString()).Border(bor => bor.Color(ConsoleColor.Yellow.ToString())).Add();
+                    })
+                    .Pointers(po =>
+                    {
+                        po.Value(10000)
+                        .Length(90)
+                        .Width(8)
+                        .ShowBackNeedle(true)
+                        .BackNeedleLength(15).Add();
+                    }).Add();
+                })
+    )
+</div>
+
+<script type="text/javascript">
+    function rowSelect(sender) {
+        var gauge = $("#circulargauge1").ejCircularGauge("instance");
+        gauge.setPointerValue(0, 0, sender.data.Fill_Amount);
+    }
+</script>
